@@ -121,16 +121,16 @@ yum -y install kibana-${elastic_version}
 chkconfig --add kibana
 
 # Creating key and certificate
-openssl req -x509 -batch -nodes -days 3650 -newkey rsa:2048 -keyout /etc/kibana/kibana.key -out /etc/kibana/kibana.cert
+# openssl req -x509 -batch -nodes -days 3650 -newkey rsa:2048 -keyout /etc/kibana/kibana.key -out /etc/kibana/kibana.cert
 
 # Configuring kibana.yml
 cat > /etc/kibana/kibana.yml << EOF
 elasticsearch.url: "http://${eth0_ip}:9200"
 server.port: ${kibana_port}
 server.host: "0.0.0.0"
-server.ssl.enabled: true
-server.ssl.key: /etc/kibana/kibana.key
-server.ssl.certificate: /etc/kibana/kibana.cert
+# server.ssl.enabled: false
+# server.ssl.key: /etc/kibana/kibana.key
+# server.ssl.certificate: /etc/kibana/kibana.cert
 EOF
 
 # Allow Kibana to listen on privileged ports
