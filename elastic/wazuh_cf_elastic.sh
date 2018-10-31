@@ -15,11 +15,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Mounting ephemeral partition
-mkdir /mnt/ephemeral
-sleep 1
-mkfs -t ext4 /dev/nvme0n1
-mount /dev/nvme0n1 /mnt/ephemeral
-echo "/dev/nvme0n1 /mnt/ephemeral ext4 defaults,nofail 0 2" | tee -a /etc/fstab
+mkdir /tmp/ephemeral
 
 # Downloading and installing JRE
 url_jre="https://download.oracle.com/otn-pub/java/jdk/8u191-b12/2787e4a523244c269598db4e85c51e0c/jre-8u191-linux-x64.rpm"
@@ -50,9 +46,9 @@ chkconfig --add elasticsearch
 /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch discovery-ec2
 
 # Creating data and logs directories
-mkdir -p /mnt/ephemeral/elasticsearch/lib
-mkdir -p /mnt/ephemeral/elasticsearch/log
-chown -R elasticsearch:elasticsearch /mnt/ephemeral/elasticsearch
+mkdir -p /tmp/ephemeral/elasticsearch/lib
+mkdir -p /tmp/ephemeral/elasticsearch/log
+chown -R elasticsearch:elasticsearch /tmp/ephemeral/elasticsearch
 
 # Configuration file created by AWS Cloudformation template
 # Because of it we set the right owner/group for the file
@@ -115,14 +111,14 @@ curl -so /etc/logstash/conf.d/01-wazuh.conf "https://raw.githubusercontent.com/w
 sed -i "s/localhost:9200/${eth0_ip}:9200/" /etc/logstash/conf.d/01-wazuh.conf
 
 # Creating data and logs directories
-mkdir -p /mnt/ephemeral/logstash/lib
-mkdir -p /mnt/ephemeral/logstash/log
-chown -R logstash:logstash /mnt/ephemeral/logstash
+mkdir -p /tmp/ephemeral/logstash/lib
+mkdir -p /tmp/ephemeral/logstash/log
+chown -R logstash:logstash /tmp/ephemeral/logstash
 
 # Configuring logstash.yml
 cat > /etc/logstash/logstash.yml << 'EOF'
-path.data: /mnt/ephemeral/logstash/lib
-path.logs: /mnt/ephemeral/logstash/log
+path.data: /tmp/ephemeral/logstash/lib
+path.logs: /tmp/ephemeral/logstash/log
 path.config: /etc/logstash/conf.d/*.conf
 EOF
 
