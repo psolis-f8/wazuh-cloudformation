@@ -122,6 +122,8 @@ path.logs: /tmp/ephemeral/logstash/log
 path.config: /etc/logstash/conf.d/*.conf
 EOF
 
+sed -i "s/LS_GROUP=logstash/LS_GROUP=ossec/" /etc/logstash/startup.options
+
 # Configuring jvm.options
 cat > /etc/logstash/jvm.options << 'EOF'
 -Xms2g
