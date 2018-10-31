@@ -16,6 +16,7 @@ fi
 
 # Mounting ephemeral partition
 mkdir /mnt/ephemeral
+sleep 1
 mkfs -t ext4 /dev/nvme0n1
 mount /dev/nvme0n1 /mnt/ephemeral
 echo "/dev/nvme0n1 /mnt/ephemeral ext4 defaults,nofail 0 2" | tee -a /etc/fstab
