@@ -42,10 +42,10 @@ EOF
 yum -y install elasticsearch-${elastic_version}
 chkconfig --add elasticsearch
 
-curl https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
-
 # Starting Elasticsearch
 service elasticsearch start
+
+curl https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 
 #Installing Logstash
 yum -y install logstash-${elastic_version}
