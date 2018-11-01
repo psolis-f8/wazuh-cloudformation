@@ -55,7 +55,10 @@ export NODE_OPTIONS="--max-old-space-size=3072"
 sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.6.1_6.4.2.zip
 
 # Configuring kibana.yml
-sed -i "s/#server.host: "localhost"/server.host: "0.0.0.0"/" /etc/kibana/kibana.yml
+cat > /etc/kibana/kibana.yml << EOF
+server.port: ${kibana_port}
+server.host: "0.0.0.0"
+EOF
 
 chkconfig --add kibana
 
