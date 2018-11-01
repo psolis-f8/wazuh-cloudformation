@@ -57,9 +57,9 @@ EOF
 
 yum install filebeat-6.4.2
 
-curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/filebeat/filebeat.yml
-sed -i "s/YOUR_ELASTIC_SERVER_IP/${kibana_ip}/" /etc/filebeat/filebeat.yml
-
-chkconfig --add filebeat
-
-service filebeat start
+# curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/filebeat/filebeat.yml
+# sed -i "s/YOUR_ELASTIC_SERVER_IP/${kibana_ip}/" /etc/filebeat/filebeat.yml
+#
+# chkconfig --add filebeat
+#
+# service filebeat start
