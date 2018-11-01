@@ -27,13 +27,13 @@ autorefresh=1
 type=rpm-md
 EOF
 
-yum install elasticsearch-6.4.2
+yum -y install elasticsearch-6.4.2
 
 chkconfig --add elasticsearch
 
 curl https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 
-yum install logstash-6.4.2
+yum -y install logstash-6.4.2
 
 curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/logstash/01-wazuh-remote.conf
 
@@ -41,7 +41,7 @@ sed -i "s/LS_GROUP=logstash/LS_GROUP=ossec/" /etc/logstash/startup.options
 
 initctl start logstash
 
-yum install kibana-6.4.2
+yum -y install kibana-6.4.2
 
 export NODE_OPTIONS="--max-old-space-size=3072"
 
