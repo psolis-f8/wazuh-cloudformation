@@ -119,7 +119,7 @@ cat > ${api_config} << EOF
 {
   "api_user": "wazuh_api_user",
   "api_password": "wazuh_api_password",
-  "url": "https://wazuh_master_ip",
+  "url": "http://wazuh_master_ip",
   "api_port": "wazuh_api_port",
   "insecure": "false",
   "component": "API",

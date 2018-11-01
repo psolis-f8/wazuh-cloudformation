@@ -55,7 +55,7 @@ export NODE_OPTIONS="--max-old-space-size=3072"
 sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.6.1_6.4.2.zip
 
 # Configuring kibana.yml
-sed -i "s/# server.host: "localhost"/server.host: "0.0.0.0"/" /etc/kibana/kibana.yml
+sed -i "s/#server.host: "localhost"/server.host: "0.0.0.0"/" /etc/kibana/kibana.yml
 
 chkconfig --add kibana
 
@@ -67,7 +67,7 @@ cat > ${api_config} << EOF
 {
   "api_user": "wazuh_api_user",
   "api_password": "wazuh_api_password",
-  "url": "https://wazuh_master_ip",
+  "url": "http://wazuh_master_ip",
   "api_port": "wazuh_api_port",
   "insecure": "false",
   "component": "API",
