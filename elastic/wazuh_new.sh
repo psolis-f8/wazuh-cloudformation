@@ -31,6 +31,8 @@ yum -y install elasticsearch-6.4.2
 
 chkconfig --add elasticsearch
 
+service elasticsearch start
+
 curl https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 
 yum -y install logstash-6.4.2
