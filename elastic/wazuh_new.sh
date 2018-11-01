@@ -33,7 +33,10 @@ chkconfig --add elasticsearch
 
 service elasticsearch start
 
-sleep 30
+until $(curl --output /dev/null --silent --head --fail http://localhost:9200/?pretty); do
+    printf '.'
+    sleep 10
+done
 
 curl https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/elasticsearch/wazuh-elastic6-template-alerts.json | curl -XPUT 'http://localhost:9200/_template/wazuh' -H 'Content-Type: application/json' -d @-
 
