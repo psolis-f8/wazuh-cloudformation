@@ -55,6 +55,29 @@ curl -so /etc/logstash/conf.d/01-wazuh.conf "https://raw.githubusercontent.com/w
 
 sed -i "s/LS_GROUP=logstash/LS_GROUP=ossec/" /etc/logstash/startup.options
 
+# Configuring jvm.options
+cat > /etc/logstash/jvm.options << 'EOF'
+-Xms2g
+-Xmx2g
+-XX:+UseParNewGC
+-XX:+UseConcMarkSweepGC
+-XX:CMSInitiatingOccupancyFraction=75
+-XX:+UseCMSInitiatingOccupancyOnly
+-Djava.awt.headless=true
+-Dfile.encoding=UTF-8
+-Djruby.compile.invokedynamic=true
+-Djruby.jit.threshold=0
+-XX:+HeapDumpOnOutOfMemoryError
+-Djava.security.egd=file:/dev/urandom
+EOF
+
+# Configuring RAM memory in jvm.options
+ram_gb=$(free -g | awk '/^Mem:/{print $2}')
+ram=$(( ${ram_gb} / 4 ))
+if [ $ram -eq "0" ]; then ram=1; fi
+sed -i "s/-Xms2g/-Xms${ram}g/" /etc/logstash/jvm.options
+sed -i "s/-Xmx2g/-Xms${ram}g/" /etc/logstash/jvm.options
+
 # Starting Logstash
 initctl start logstash
 
