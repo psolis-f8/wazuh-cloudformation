@@ -54,10 +54,16 @@ export NODE_OPTIONS="--max-old-space-size=3072"
 
 sudo -u kibana /usr/share/kibana/bin/kibana-plugin install https://packages.wazuh.com/wazuhapp/wazuhapp-3.6.1_6.4.2.zip
 
+# Creating key and certificate
+openssl req -x509 -batch -nodes -days 3650 -newkey rsa:2048 -keyout /etc/kibana/kibana.key -out /etc/kibana/kibana.cert
+
 # Configuring kibana.yml
 cat > /etc/kibana/kibana.yml << EOF
 server.port: ${kibana_port}
 server.host: "0.0.0.0"
+server.ssl.enabled: true
+server.ssl.key: /etc/kibana/kibana.key
+server.ssl.certificate: /etc/kibana/kibana.cert
 EOF
 
 chkconfig --add kibana
