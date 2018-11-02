@@ -79,7 +79,7 @@ chkconfig --add filebeat
 # Configuring Filebeat
 curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/v${wazuh_version}/extensions/filebeat/filebeat.yml
 
-cat > /etc/filebeat/filebeat2.yml << EOF
+cat > /etc/filebeat/filebeat.yml << EOF
 filebeat:
  prospectors:
   - type: log
