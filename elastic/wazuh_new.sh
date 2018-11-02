@@ -44,7 +44,6 @@ curl https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/elasticsearch/
 yum -y install logstash-6.4.2
 
 curl -so /etc/logstash/conf.d/01-wazuh.conf https://raw.githubusercontent.com/wazuh/wazuh/3.6/extensions/logstash/01-wazuh-remote.conf
-
 sed -i "s/LS_GROUP=logstash/LS_GROUP=ossec/" /etc/logstash/startup.options
 
 initctl start logstash

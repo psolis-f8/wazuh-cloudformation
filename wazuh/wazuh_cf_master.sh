@@ -8,7 +8,7 @@ elastic_version=$(cat /tmp/wazuh_cf_settings | grep '^Elastic_Wazuh:' | cut -d' 
 wazuh_version=$(cat /tmp/wazuh_cf_settings | grep '^Elastic_Wazuh:' | cut -d' ' -f2 | cut -d'_' -f2)
 wazuh_api_user=$(cat /tmp/wazuh_cf_settings | grep '^WazuhApiAdminUsername:' | cut -d' ' -f2)
 wazuh_api_password=$(cat /tmp/wazuh_cf_settings | grep '^WazuhApiAdminPassword:' | cut -d' ' -f2)
-elb_logstash=$(cat /tmp/wazuh_cf_settings | grep '^ElbLogstashDNS:' | cut -d' ' -f2)
+kibana_dns=$(cat /tmp/wazuh_cf_settings | grep '^KibanaDNS:' | cut -d' ' -f2)
 
 # Check if running as root
 if [[ $EUID -ne 0 ]]; then
@@ -49,9 +49,6 @@ chkconfig --add wazuh-manager
 # Enable registration service (only for master node)
 /var/ossec/bin/ossec-control enable auth
 
-# Change manager protocol to tcp, to be used by Amazon ELB
-sed -i "s/<protocol>udp<\/protocol>/<protocol>tcp<\/protocol>/" /var/ossec/etc/ossec.conf
-
 # Restart wazuh-manager
 service wazuh-manager restart
 
@@ -81,7 +78,27 @@ chkconfig --add filebeat
 
 # Configuring Filebeat
 curl -so /etc/filebeat/filebeat.yml https://raw.githubusercontent.com/wazuh/wazuh/v${wazuh_version}/extensions/filebeat/filebeat.yml
-sed -i "s/YOUR_ELASTIC_SERVER_IP/${elb_logstash}/" /etc/filebeat/filebeat.yml
+
+cat > /etc/filebeat/filebeat2.yml << EOF
+filebeat:
+ prospectors:
+  - type: log
+    enabled: true
+    paths:
+     - "/var/ossec/logs/alerts/alerts.json"
+    document_type: json
+    json.message_key: log
+    json.keys_under_root: true
+    json.overwrite_keys: true
+
+output:
+ logstash:
+   # The Logstash hosts
+   hosts: ["${kibana_dns}:5000"]
+#   ssl:
+#     certificate_authorities: ["/etc/filebeat/logstash.crt"]
+EOF
+
 service filebeat start
 
 # Disable repositories
